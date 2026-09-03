@@ -1,10 +1,11 @@
 import './style.css'
-import { marketData } from './market-data.js'
+import { fetchMarketData } from './fetch-market-data.js'
 import { filterByTotalVolume } from './filter-market-data.js'
 import { searchMarketData } from './search-market-data.js'
 
-const filteredMarketData = filterByTotalVolume(marketData)
 const app = document.querySelector('#app')
+let marketData = []
+let filteredMarketData = []
 
 function renderCryptoList(cryptocurrencies) {
   return cryptocurrencies
@@ -46,6 +47,8 @@ app.innerHTML = `
 <section id="spacer"></section>
 `
 
+marketData = await fetchMarketData()
+filteredMarketData = filterByTotalVolume(marketData)
 renderMarketData(filteredMarketData)
 
 document.querySelector('#crypto-search').addEventListener('input', (event) => {

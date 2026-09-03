@@ -275,44 +275,60 @@ code {
   }
 }
 
+#market-data-count {
+  font-size: 15px;
+  line-height: 140%;
+  margin-top: 6px;
+}
+
 .crypto-search {
   display: block;
   width: 100%;
-  min-height: 48px;
+  min-height: 42px;
   box-sizing: border-box;
-  margin-top: 16px;
+  margin-top: 18px;
   border: 1px solid var(--accent-border);
   border-radius: 8px;
-  padding: 12px 14px;
+  padding: 9px 12px;
   font: inherit;
   color: var(--text-h);
   background: var(--bg);
   box-shadow: 0 1px 0 var(--border);
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
 
   &:focus {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
+    border-color: var(--accent);
+    outline: none;
+    box-shadow:
+      0 1px 0 var(--border),
+      0 0 0 3px var(--accent-bg);
   }
 }
 
 .crypto-list {
   list-style: none;
   padding: 0;
-  margin: 24px 0 0;
+  margin: 28px 0 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
 }
 
 .crypto-item {
   position: relative;
   border: 1px solid var(--border);
   border-radius: 8px;
-  padding: 16px 64px 16px 16px;
+  padding: 16px 62px 16px 16px;
   background: var(--social-bg);
 
   h3 {
-    margin: 0 0 6px;
+    margin: 0 0 4px;
     color: var(--text-h);
     font-size: 18px;
     line-height: 125%;
@@ -321,22 +337,35 @@ code {
   p {
     font-size: 15px;
     line-height: 140%;
+    margin-top: 4px;
   }
 }
 
 .crypto-logo {
   position: absolute;
-  top: 16px;
-  right: 16px;
-  width: 36px;
-  height: 36px;
+  top: 14px;
+  right: 14px;
+  width: 38px;
+  height: 38px;
+  box-sizing: border-box;
+  padding: 2px;
   object-fit: contain;
 }
 
 .crypto-symbol {
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   color: var(--accent);
   font-weight: 700;
+}
+
+.crypto-item p:last-child {
+  white-space: nowrap;
+}
+
+@media (max-width: 520px) {
+  .crypto-item p:last-child {
+    white-space: normal;
+  }
 }
 
 #spacer {

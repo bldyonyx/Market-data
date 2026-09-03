@@ -23,14 +23,15 @@ function renderCryptoList(cryptocurrencies) {
 }
 
 function renderMarketData(cryptocurrencies) {
-  document.querySelector('#market-data-title').textContent =
-    `Cryptomonnaies filtrées — ${cryptocurrencies.length} / ${marketData.length} affichées`
+  document.querySelector('#market-data-count').textContent =
+    `${cryptocurrencies.length} résultats sur ${marketData.length}`
   document.querySelector('.crypto-list').innerHTML = renderCryptoList(cryptocurrencies)
 }
 
 app.innerHTML = `
 <section id="market-data">
-  <h2 id="market-data-title"></h2>
+  <h2 id="market-data-title">Cryptomonnaies</h2>
+  <p id="market-data-count"></p>
   <input
     id="crypto-search"
     class="crypto-search"

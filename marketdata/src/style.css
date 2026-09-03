@@ -358,6 +358,10 @@ code {
   font-weight: 700;
 }
 
+.crypto-item p:nth-of-type(2) {
+  white-space: nowrap;
+}
+
 .crypto-item p:last-child {
   white-space: nowrap;
 }

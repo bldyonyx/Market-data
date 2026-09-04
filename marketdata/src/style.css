@@ -1,23 +1,26 @@
+@import "tailwindcss";
+
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
+  --text: #aeb7c7;
+  --text-h: #f8fafc;
+  --bg: #121318;
+  --border: #2a2d37;
+  --card: #1d1e26;
+  --card-hover: #22242d;
+  --accent: #bf7cff;
+  --accent-soft: #68d6c8;
+  --accent-bg: rgba(191, 124, 255, 0.14);
+  --accent-border: rgba(191, 124, 255, 0.48);
+  --surface-glow: rgba(104, 214, 200, 0.05);
   --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+    rgba(0, 0, 0, 0.28) 0 14px 24px -18px, rgba(0, 0, 0, 0.28) 0 8px 12px -10px;
 
   --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+  --display: Georgia, 'Times New Roman', serif;
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
+  font: 16px/145% var(--sans);
+  letter-spacing: 0;
+  color-scheme: dark;
   color: var(--text);
   background: var(--bg);
   font-synthesis: none;
@@ -30,419 +33,232 @@
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at 50% 0, rgba(191, 124, 255, 0.08), transparent 260px),
+    linear-gradient(180deg, rgba(104, 214, 200, 0.035), transparent 260px),
+    var(--bg);
 }
 
-body {
+h2 {
+  color: var(--text-h);
+  font-family: var(--display);
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 112%;
   margin: 0;
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
-
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
 p {
   margin: 0;
 }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
-}
-
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
-}
-
-.counter {
-  font-size: 16px;
-  padding: 5px 10px;
-  border-radius: 5px;
-  color: var(--accent);
-  background: var(--accent-bg);
-  border: 2px solid transparent;
-  transition: border-color 0.3s;
-  margin-bottom: 24px;
-
-  &:hover {
-    border-color: var(--accent-border);
-  }
-  &:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
-}
-
-.hero {
-  position: relative;
-
-  .base,
-  .framework,
-  .vite {
-    inset-inline: 0;
-    margin: 0 auto;
-  }
-
-  .base {
-    width: 170px;
-    position: relative;
-    z-index: 0;
-  }
-
-  .framework,
-  .vite {
-    position: absolute;
-  }
-
-  .framework {
-    z-index: 1;
-    top: 34px;
-    height: 28px;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg)
-      scale(1.4);
-  }
-
-  .vite {
-    z-index: 0;
-    top: 107px;
-    height: 26px;
-    width: auto;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(40deg) rotateY(39deg)
-      scale(0.8);
-  }
-}
-
 #app {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
   box-sizing: border-box;
-}
-
-#center {
   display: flex;
   flex-direction: column;
-  gap: 25px;
-  place-content: center;
-  place-items: center;
-  flex-grow: 1;
-
-  @media (max-width: 1024px) {
-    padding: 32px 20px 24px;
-    gap: 18px;
-  }
-}
-
-#next-steps {
-  display: flex;
-  border-top: 1px solid var(--border);
+  max-width: 100%;
+  min-height: 100svh;
+  width: 1126px;
+  margin: 0 auto;
+  border-inline: 1px solid var(--border);
   text-align: left;
-
-  & > div {
-    flex: 1 1 0;
-    padding: 32px;
-    @media (max-width: 1024px) {
-      padding: 24px 20px;
-    }
-  }
-
-  .icon {
-    margin-bottom: 16px;
-    width: 22px;
-    height: 22px;
-  }
-
-  @media (max-width: 1024px) {
-    flex-direction: column;
-    text-align: center;
-  }
-}
-
-#docs {
-  border-right: 1px solid var(--border);
-
-  @media (max-width: 1024px) {
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-  }
-}
-
-#next-steps ul {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  gap: 8px;
-  margin: 32px 0 0;
-
-  .logo {
-    height: 18px;
-  }
-
-  a {
-    color: var(--text-h);
-    font-size: 16px;
-    border-radius: 6px;
-    background: var(--social-bg);
-    display: flex;
-    padding: 6px 12px;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    transition: box-shadow 0.3s;
-
-    &:hover {
-      box-shadow: var(--shadow);
-    }
-    .button-icon {
-      height: 18px;
-      width: 18px;
-    }
-  }
-
-  @media (max-width: 1024px) {
-    margin-top: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
-
-    li {
-      flex: 1 1 calc(50% - 8px);
-    }
-
-    a {
-      width: 100%;
-      justify-content: center;
-      box-sizing: border-box;
-    }
-  }
 }
 
 #market-data {
   border-top: 1px solid var(--border);
-  padding: 32px;
+  padding: 36px 32px 44px;
   text-align: left;
+}
 
-  @media (max-width: 1024px) {
-    padding: 24px 20px;
-  }
+.market-toolbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 420px);
+  align-items: end;
+  gap: 20px;
 }
 
 #market-data-count {
+  color: color-mix(in srgb, var(--text) 88%, var(--accent-soft));
   font-size: 15px;
   line-height: 140%;
-  margin-top: 6px;
+  margin-top: 8px;
 }
 
 .crypto-search {
+  box-sizing: border-box;
   display: block;
   width: 100%;
-  min-height: 42px;
-  box-sizing: border-box;
-  margin-top: 18px;
+  min-height: 46px;
   border: 1px solid var(--accent-border);
-  border-radius: 8px;
-  padding: 9px 12px;
-  font: inherit;
+  border-radius: 10px;
+  padding: 10px 14px;
+  background: color-mix(in srgb, var(--bg) 88%, var(--card));
   color: var(--text-h);
-  background: var(--bg);
-  box-shadow: 0 1px 0 var(--border);
+  font: inherit;
+  font-size: 15px;
   transition:
+    background-color 0.2s,
     border-color 0.2s,
     box-shadow 0.2s;
+}
 
-  &:focus {
-    border-color: var(--accent);
-    outline: none;
-    box-shadow:
-      0 1px 0 var(--border),
-      0 0 0 3px var(--accent-bg);
-  }
+.crypto-search::placeholder {
+  color: color-mix(in srgb, var(--text) 78%, transparent);
+}
+
+.crypto-search:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow:
+    0 0 0 3px var(--accent-bg),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
 .crypto-list {
-  list-style: none;
-  padding: 0;
-  margin: 28px 0 0;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
   gap: 16px;
-
-  @media (max-width: 1024px) {
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  }
+  list-style: none;
+  margin: 30px 0 0;
+  padding: 0;
 }
 
 .crypto-item {
-  position: relative;
   border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 16px 62px 16px 16px;
-  background: var(--social-bg);
+  border-radius: 10px;
+  padding: 16px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.025), transparent 58px),
+    linear-gradient(135deg, var(--surface-glow), transparent 48%),
+    var(--card);
   cursor: pointer;
+  min-height: 142px;
   transition:
+    background-color 0.2s,
     border-color 0.2s,
     box-shadow 0.2s,
     transform 0.2s;
-
-  &:hover {
-    border-color: var(--accent-border);
-    box-shadow: var(--shadow);
-    transform: translateY(-2px);
-  }
-
-  h3 {
-    margin: 0 0 4px;
-    color: var(--text-h);
-    font-size: 18px;
-    line-height: 125%;
-  }
-
-  p {
-    font-size: 15px;
-    line-height: 140%;
-    margin-top: 4px;
-  }
 }
 
+.crypto-item:hover {
+  border-color: var(--accent-border);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 62px),
+    linear-gradient(135deg, rgba(104, 214, 200, 0.08), transparent 52%),
+    var(--card-hover);
+  box-shadow: var(--shadow);
+  transform: translateY(-1px);
+}
+
+.crypto-item:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-bg);
+}
+
+.crypto-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  min-width: 0;
+}
+
+.crypto-card-title {
+  min-width: 0;
+}
+
+.crypto-item h3 {
+  color: var(--text-h);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 125%;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.crypto-item p {
+  font-size: 15px;
+  line-height: 140%;
+}
+
+.crypto-logo {
+  box-sizing: border-box;
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  padding: 3px;
+  object-fit: contain;
+  filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.18));
+}
+
+.crypto-symbol {
+  color: color-mix(in srgb, var(--accent) 78%, var(--accent-soft));
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin-top: 4px;
+}
+
+.crypto-card-stats {
+  display: grid;
+  gap: 4px;
+  margin-top: 16px;
+}
+
+.crypto-card-stats span {
+  color: color-mix(in srgb, var(--text) 86%, transparent);
+}
+
+.crypto-card-stats strong {
+  color: color-mix(in srgb, var(--text-h) 72%, var(--accent-soft));
+  font-weight: 700;
+}
+
+.crypto-item p:nth-of-type(2),
+.crypto-item p:last-child {
+  white-space: nowrap;
+}
+
+#back-to-list,
 .back-button {
   display: inline-flex;
   align-items: center;
   min-height: 40px;
   margin-bottom: 20px;
   border: 1px solid var(--accent-border);
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 8px 14px;
-  font: inherit;
-  color: var(--text-h);
   background: var(--bg);
+  color: var(--text-h);
   cursor: pointer;
+  font: inherit;
   transition:
     border-color 0.2s,
     box-shadow 0.2s;
-
-  &:hover {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-bg);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
 }
 
-.back-to-top {
-  position: fixed;
-  right: max(18px, env(safe-area-inset-right));
-  bottom: max(18px, env(safe-area-inset-bottom));
-  z-index: 20;
-  display: inline-grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  border: 1px solid var(--accent-border);
-  border-radius: 8px;
-  color: var(--text-h);
-  background: var(--bg);
-  box-shadow: var(--shadow);
-  cursor: pointer;
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(12px);
-  visibility: hidden;
-  transition:
-    border-color 0.2s,
-    box-shadow 0.2s,
-    opacity 0.2s,
-    transform 0.2s,
-    visibility 0.2s;
-
-  svg {
-    width: 22px;
-    height: 22px;
-    fill: currentColor;
-  }
-
-  &:hover {
-    border-color: var(--accent);
-    box-shadow:
-      var(--shadow),
-      0 0 0 3px var(--accent-bg);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
-
-  @media (max-width: 520px) {
-    right: max(14px, env(safe-area-inset-right));
-    bottom: max(14px, env(safe-area-inset-bottom));
-    width: 42px;
-    height: 42px;
-  }
+#back-to-list:hover,
+.back-button:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-bg);
 }
 
-.back-to-top.is-visible {
-  opacity: 0.92;
-  pointer-events: auto;
-  transform: translateY(0);
-  visibility: visible;
+#back-to-list:focus-visible,
+.back-button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .crypto-detail-card {
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 24px;
-  background: var(--social-bg);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.025), transparent 72px),
+    linear-gradient(135deg, var(--surface-glow), transparent 48%),
+    var(--card);
 }
 
 .crypto-detail-header {
@@ -450,34 +266,30 @@ code {
   align-items: center;
   gap: 18px;
   margin-bottom: 24px;
+}
 
-  h2 {
-    margin-bottom: 8px;
-  }
-
-  @media (max-width: 520px) {
-    align-items: flex-start;
-  }
+.crypto-detail-header h2 {
+  margin-bottom: 8px;
 }
 
 .crypto-detail-logo {
+  flex: 0 0 72px;
   width: 72px;
   height: 72px;
-  flex: 0 0 72px;
   object-fit: contain;
 }
 
 .crypto-detail-symbol {
-  color: var(--accent);
+  color: color-mix(in srgb, var(--accent) 78%, var(--accent-soft));
   font-weight: 700;
   text-transform: uppercase;
 }
 
 .crypto-detail-price {
-  color: var(--text-h);
+  color: color-mix(in srgb, var(--text-h) 74%, var(--accent-soft));
   font-size: 24px;
-  line-height: 120%;
   font-weight: 700;
+  line-height: 120%;
 }
 
 .crypto-detail-change {
@@ -497,87 +309,102 @@ code {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
-
-  @media (max-width: 720px) {
-    grid-template-columns: 1fr;
-  }
 }
 
 .crypto-detail-stat {
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 14px;
-  background: var(--bg);
+  background: color-mix(in srgb, var(--bg) 84%, var(--card));
+}
 
-  span,
-  strong {
-    display: block;
-  }
+.crypto-detail-stat span,
+.crypto-detail-stat strong {
+  display: block;
+}
 
-  span {
-    font-size: 14px;
-    line-height: 135%;
-  }
+.crypto-detail-stat span {
+  font-size: 14px;
+  line-height: 135%;
+}
 
-  strong {
-    margin-top: 4px;
-    color: var(--text-h);
-    overflow-wrap: anywhere;
-  }
+.crypto-detail-stat strong {
+  color: var(--text-h);
+  margin-top: 4px;
+  overflow-wrap: anywhere;
 }
 
 .crypto-detail-description {
   margin-top: 24px;
-
-  h3 {
-    margin: 0 0 10px;
-    color: var(--text-h);
-    font-size: 18px;
-    line-height: 125%;
-  }
-
-  p {
-    line-height: 150%;
-  }
 }
 
-.crypto-logo {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  width: 38px;
-  height: 38px;
-  box-sizing: border-box;
-  padding: 2px;
-  object-fit: contain;
+.crypto-detail-description h3 {
+  color: var(--text-h);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 125%;
+  margin: 0 0 10px;
 }
 
-.crypto-symbol {
-  margin-bottom: 10px;
-  color: var(--accent);
-  font-weight: 700;
+.crypto-detail-description p {
+  line-height: 150%;
 }
 
-.crypto-item p:nth-of-type(2) {
-  white-space: nowrap;
+.back-to-top {
+  position: fixed;
+  right: max(18px, env(safe-area-inset-right));
+  bottom: max(18px, env(safe-area-inset-bottom));
+  z-index: 20;
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--accent-border);
+  border-radius: 10px;
+  background: var(--bg);
+  box-shadow: var(--shadow);
+  color: var(--text-h);
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(12px);
+  visibility: hidden;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s,
+    opacity 0.2s,
+    transform 0.2s,
+    visibility 0.2s;
 }
 
-.crypto-item p:last-child {
-  white-space: nowrap;
+.back-to-top svg {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
 }
 
-@media (max-width: 520px) {
-  .crypto-item p:last-child {
-    white-space: normal;
-  }
+.back-to-top:hover {
+  border-color: var(--accent);
+  box-shadow:
+    var(--shadow),
+    0 0 0 3px var(--accent-bg);
+}
+
+.back-to-top:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.back-to-top.is-visible {
+  opacity: 0.92;
+  pointer-events: auto;
+  transform: translateY(0);
+  visibility: visible;
 }
 
 #spacer {
   height: 88px;
   border-top: 1px solid var(--border);
-  @media (max-width: 1024px) {
-    height: 48px;
-  }
 }
 
 .ticks {
@@ -599,5 +426,74 @@ code {
   &::after {
     right: 0;
     border-right-color: var(--border);
+  }
+}
+
+@media (max-width: 1024px) {
+  h2 {
+    font-size: 26px;
+  }
+
+  #market-data {
+    padding: 30px 24px 38px;
+  }
+
+  .crypto-list {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+
+  #spacer {
+    height: 48px;
+  }
+}
+
+@media (max-width: 720px) {
+  .market-toolbar {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+    gap: 18px;
+  }
+
+  .crypto-list {
+    margin-top: 28px;
+  }
+
+  .crypto-detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  #app {
+    border-inline: 0;
+  }
+
+  #market-data {
+    padding: 26px 20px 34px;
+  }
+
+  .crypto-list {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .crypto-item {
+    min-height: 136px;
+    padding: 16px;
+  }
+
+  .crypto-item p:last-child {
+    white-space: normal;
+  }
+
+  .crypto-detail-header {
+    align-items: flex-start;
+  }
+
+  .back-to-top {
+    right: max(14px, env(safe-area-inset-right));
+    bottom: max(14px, env(safe-area-inset-bottom));
+    width: 42px;
+    height: 42px;
   }
 }

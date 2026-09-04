@@ -20,6 +20,24 @@ function formatCurrency(value) {
   }).format(value)
 }
 
+function formatCompactCurrency(value) {
+  if (value === null || value === undefined) {
+    return 'Non disponible'
+  }
+
+  if (Math.abs(value) < 1000) {
+    return formatCurrency(value)
+  }
+
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    notation: 'compact',
+    compactDisplay: 'short',
+    maximumFractionDigits: 2,
+  }).format(value)
+}
+
 function formatNumber(value) {
   if (value === null || value === undefined) {
     return 'Non disponible'
@@ -69,7 +87,7 @@ function renderCryptoList(cryptocurrencies) {
           <h3>${escapeHtml(crypto.name)}</h3>
           <p class="crypto-symbol">${escapeHtml(crypto.symbol.toUpperCase())}</p>
           <p>Current price: <strong>${formatCurrency(crypto.current_price)}</strong></p>
-          <p>Total volume: ${formatCurrency(crypto.total_volume)}</p>
+          <p>Total volume: ${formatCompactCurrency(crypto.total_volume)}</p>
         </li>
       `,
     )

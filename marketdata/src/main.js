@@ -1,4 +1,13 @@
 import './style.css'
+import {
+  Activity,
+  ArrowLeft,
+  ArrowUp,
+  Search,
+  TrendingDown,
+  TrendingUp,
+  createIcons,
+} from 'lucide'
 import { fetchCryptoDetails, fetchMarketData } from './fetch-market-data.js'
 import { filterByTotalVolume } from './filter-market-data.js'
 import { searchMarketData } from './search-market-data.js'
@@ -10,6 +19,27 @@ let filteredMarketData = []
 let currentSearchResults = []
 let refreshIntervalId = null
 let isRefreshingMarketData = false
+const lucideIcons = {
+  Activity,
+  ArrowLeft,
+  ArrowUp,
+  Search,
+  TrendingDown,
+  TrendingUp,
+}
+
+function renderIcons(scope = document) {
+  createIcons({
+    icons: lucideIcons,
+    attrs: {
+      'aria-hidden': 'true',
+      focusable: 'false',
+      'stroke-width': 2.25,
+    },
+    nameAttr: 'data-lucide',
+    root: scope,
+  })
+}
 
 function formatCurrency(value) {
   if (value === null || value === undefined) {
@@ -81,24 +111,78 @@ function getDetailValue(detail, listCrypto, path, fallbackKey) {
   return value ?? listCrypto?.[fallbackKey]
 }
 
+function renderSparkline(prices, priceChangeClass) {
+  if (!Array.isArray(prices) || prices.length < 2) {
+    return '<div class="crypto-sparkline crypto-sparkline-empty" aria-hidden="true"></div>'
+  }
+
+  const width = 150
+  const height = 48
+  const padding = 3
+  const min = Math.min(...prices)
+  const max = Math.max(...prices)
+  const range = max - min || 1
+  const points = prices
+    .map((price, index) => {
+      const x = (index / (prices.length - 1)) * width
+      const y = height - padding - ((price - min) / range) * (height - padding * 2)
+
+      return `${x.toFixed(1)},${y.toFixed(1)}`
+    })
+    .join(' ')
+
+  return `
+    <svg class="crypto-sparkline ${priceChangeClass}" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      <polyline points="${points}"></polyline>
+    </svg>
+  `
+}
+
 function renderCryptoList(cryptocurrencies) {
   return cryptocurrencies
     .map(
-      (crypto) => `
+      (crypto) => {
+        const priceChangeClass =
+          crypto.price_change_percentage_24h === null ||
+          crypto.price_change_percentage_24h === undefined
+            ? ''
+            : crypto.price_change_percentage_24h >= 0
+              ? 'is-positive'
+              : 'is-negative'
+        const priceChangeDirection =
+          crypto.price_change_percentage_24h === null ||
+          crypto.price_change_percentage_24h === undefined
+            ? ''
+            : crypto.price_change_percentage_24h >= 0
+              ? '<i class="crypto-change-icon" data-lucide="trending-up"></i>'
+              : '<i class="crypto-change-icon" data-lucide="trending-down"></i>'
+
+        return `
         <li class="crypto-item" data-id="${crypto.id}">
           <div class="crypto-card-header">
             <div class="crypto-card-title">
+              <p class="crypto-rank">#${formatNumber(crypto.market_cap_rank)}</p>
               <h3>${escapeHtml(crypto.name)}</h3>
               <p class="crypto-symbol">${escapeHtml(crypto.symbol.toUpperCase())}</p>
             </div>
             <img class="crypto-logo" src="${crypto.image}" alt="${escapeHtml(crypto.name)} logo">
           </div>
+          ${renderSparkline(crypto.sparkline, priceChangeClass)}
+          <div class="crypto-price-row">
+            <div>
+              <span class="stat-label">Current price</span>
+              <strong class="crypto-price">${formatCurrency(crypto.current_price)}</strong>
+            </div>
+            <span class="crypto-change-pill ${priceChangeClass}">
+              ${formatPercentage(crypto.price_change_percentage_24h)} ${priceChangeDirection}
+            </span>
+          </div>
           <div class="crypto-card-stats">
-            <p><span>Current price</span> <strong>${formatCurrency(crypto.current_price)}</strong></p>
-            <p><span>Total volume</span> ${formatCompactCurrency(crypto.total_volume)}</p>
+            <p><span>Total volume</span> <strong>${formatCompactCurrency(crypto.total_volume)}</strong></p>
           </div>
         </li>
-      `,
+      `
+      },
     )
     .join('')
 }
@@ -107,12 +191,18 @@ function renderMarketData(cryptocurrencies) {
   currentSearchResults = cryptocurrencies
   document.querySelector('#market-data-count').textContent =
     `${cryptocurrencies.length} résultats sur ${marketData.length}`
-  document.querySelector('.crypto-list').innerHTML = renderCryptoList(cryptocurrencies)
+  document.querySelector('.crypto-list').innerHTML = cryptocurrencies.length
+    ? renderCryptoList(cryptocurrencies)
+    : '<li class="market-empty-state"><h3>Aucun résultat</h3><p>Essayez une autre recherche ou patientez jusqu a la prochaine actualisation.</p></li>'
+  renderIcons(document.querySelector('.crypto-list'))
 }
 
 function renderMarketDataError() {
   document.querySelector('#market-data-count').textContent =
-    'Impossible d actualiser les donnees pour le moment.'
+    'Impossible d actualiser les données pour le moment.'
+  document.querySelector('.crypto-list').innerHTML =
+    '<li class="market-empty-state"><h3>Données indisponibles</h3><p>Le tableau garde sa place pendant que CoinGecko redevient disponible.</p></li>'
+  renderIcons(document.querySelector('.crypto-list'))
 }
 
 function getVisibleMarketData() {
@@ -184,7 +274,10 @@ function renderCryptoDetails(detail, listCrypto) {
         : 'is-negative'
 
   document.querySelector('#crypto-detail').innerHTML = `
-    <button class="mb-5 inline-flex min-h-10 cursor-pointer items-center rounded-lg border border-(--accent-border) bg-(--bg) px-3.5 py-2 font-[inherit] text-(--text-h) transition-[border-color,box-shadow] duration-200 hover:border-(--accent) hover:shadow-[0_0_0_3px_var(--accent-bg)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)" type="button" id="back-to-list">← Retour</button>
+    <button class="back-button" type="button" id="back-to-list" aria-label="Retour a la liste">
+      <i data-lucide="arrow-left"></i>
+      <span>Retour</span>
+    </button>
     <article class="crypto-detail-card">
       <div class="crypto-detail-header">
         ${
@@ -223,6 +316,7 @@ function renderCryptoDetails(detail, listCrypto) {
       }
     </article>
   `
+  renderIcons(document.querySelector('#crypto-detail'))
 }
 
 function showListView() {
@@ -238,38 +332,52 @@ function showDetailView() {
 
 function renderDetailLoading(crypto) {
   document.querySelector('#crypto-detail').innerHTML = `
-    <button class="mb-5 inline-flex min-h-10 cursor-pointer items-center rounded-lg border border-(--accent-border) bg-(--bg) px-3.5 py-2 font-[inherit] text-(--text-h) transition-[border-color,box-shadow] duration-200 hover:border-(--accent) hover:shadow-[0_0_0_3px_var(--accent-bg)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)" type="button" id="back-to-list">← Retour</button>
+    <button class="back-button" type="button" id="back-to-list" aria-label="Retour a la liste">
+      <i data-lucide="arrow-left"></i>
+      <span>Retour</span>
+    </button>
     <div class="crypto-detail-card">
       <p>Chargement des détails de ${escapeHtml(crypto.name)}...</p>
     </div>
   `
+  renderIcons(document.querySelector('#crypto-detail'))
 }
 
 function renderDetailError(crypto) {
   document.querySelector('#crypto-detail').innerHTML = `
-    <button class="mb-5 inline-flex min-h-10 cursor-pointer items-center rounded-lg border border-(--accent-border) bg-(--bg) px-3.5 py-2 font-[inherit] text-(--text-h) transition-[border-color,box-shadow] duration-200 hover:border-(--accent) hover:shadow-[0_0_0_3px_var(--accent-bg)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)" type="button" id="back-to-list">← Retour</button>
+    <button class="back-button" type="button" id="back-to-list" aria-label="Retour a la liste">
+      <i data-lucide="arrow-left"></i>
+      <span>Retour</span>
+    </button>
     <div class="crypto-detail-card">
       <h2>${escapeHtml(crypto.name)}</h2>
       <p>Impossible de charger les détails pour le moment.</p>
     </div>
   `
+  renderIcons(document.querySelector('#crypto-detail'))
 }
 
 app.innerHTML = `
 <section id="market-data">
   <div id="market-list-view">
     <div class="market-toolbar">
-      <div>
+      <div class="market-heading">
+        <p class="market-eyebrow"><i data-lucide="activity"></i> Live CoinGecko market board</p>
         <h2 id="market-data-title">Cryptomonnaies</h2>
         <p id="market-data-count"></p>
       </div>
-      <input
-        id="crypto-search"
-        class="crypto-search"
-        type="search"
-        placeholder="Rechercher une crypto..."
-        aria-label="Rechercher une cryptomonnaie par nom ou symbole"
-      >
+      <div class="market-actions">
+        <label class="search-shell" for="crypto-search">
+          <i data-lucide="search"></i>
+          <input
+            id="crypto-search"
+            class="crypto-search"
+            type="search"
+            placeholder="Search a cryptocurrency..."
+            aria-label="Rechercher une cryptomonnaie par nom ou symbole"
+          >
+        </label>
+      </div>
     </div>
     <ul class="crypto-list"></ul>
   </div>
@@ -279,12 +387,11 @@ app.innerHTML = `
 <div class="ticks"></div>
 <section id="spacer"></section>
 <button class="back-to-top invisible pointer-events-none fixed right-[max(18px,env(safe-area-inset-right))] bottom-[max(18px,env(safe-area-inset-bottom))] z-20 inline-grid h-11 w-11 translate-y-3 cursor-pointer place-items-center rounded-lg border border-(--accent-border) bg-(--bg) text-(--text-h) opacity-0 shadow-(--shadow) transition-[border-color,box-shadow,opacity,transform,visibility] duration-200 hover:border-(--accent) hover:shadow-[var(--shadow),0_0_0_3px_var(--accent-bg)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) max-[520px]:right-[max(14px,env(safe-area-inset-right))] max-[520px]:bottom-[max(14px,env(safe-area-inset-bottom))] max-[520px]:h-10.5 max-[520px]:w-10.5" type="button" id="back-to-top" aria-label="Retour en haut" aria-hidden="true">
-  <svg class="h-5.5 w-5.5 fill-current" aria-hidden="true" viewBox="0 0 24 24" focusable="false">
-    <path d="M12 5l-7 7 1.4 1.4L11 8.8V20h2V8.8l4.6 4.6L19 12z"></path>
-  </svg>
+  <i data-lucide="arrow-up"></i>
 </button>
 `
 
+renderIcons(app)
 startMarketDataRefresh()
 
 const backToTopButton = document.querySelector('#back-to-top')

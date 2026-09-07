@@ -1,5 +1,5 @@
 const COINGECKO_MARKETS_URL =
-  'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false'
+  'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=true'
 const COINGECKO_COIN_URL = 'https://api.coingecko.com/api/v3/coins'
 
 export async function fetchMarketData() {
@@ -28,6 +28,7 @@ export async function fetchMarketData() {
     circulating_supply: crypto.circulating_supply,
     total_supply: crypto.total_supply,
     max_supply: crypto.max_supply,
+    sparkline: crypto.sparkline_in_7d?.price ?? [],
   }))
 }
 

@@ -4,9 +4,12 @@ import { filterByTotalVolume } from './filter-market-data.js'
 import { searchMarketData } from './search-market-data.js'
 
 const app = document.querySelector('#app')
+const REFRESH_INTERVAL = 30_000
 let marketData = []
 let filteredMarketData = []
 let currentSearchResults = []
+let refreshIntervalId = null
+let isRefreshingMarketData = false
 
 function formatCurrency(value) {
   if (value === null || value === undefined) {
@@ -105,6 +108,45 @@ function renderMarketData(cryptocurrencies) {
   document.querySelector('#market-data-count').textContent =
     `${cryptocurrencies.length} résultats sur ${marketData.length}`
   document.querySelector('.crypto-list').innerHTML = renderCryptoList(cryptocurrencies)
+}
+
+function renderMarketDataError() {
+  document.querySelector('#market-data-count').textContent =
+    'Impossible d actualiser les donnees pour le moment.'
+}
+
+function getVisibleMarketData() {
+  const searchQuery = document.querySelector('#crypto-search')?.value ?? ''
+
+  return searchMarketData(filteredMarketData, searchQuery)
+}
+
+async function refreshMarketData() {
+  if (isRefreshingMarketData) {
+    return
+  }
+
+  isRefreshingMarketData = true
+
+  try {
+    marketData = await fetchMarketData()
+    filteredMarketData = filterByTotalVolume(marketData)
+    renderMarketData(getVisibleMarketData())
+  } catch (error) {
+    console.error(error)
+    renderMarketDataError()
+  } finally {
+    isRefreshingMarketData = false
+  }
+}
+
+function startMarketDataRefresh() {
+  if (refreshIntervalId !== null) {
+    return
+  }
+
+  refreshMarketData()
+  refreshIntervalId = window.setInterval(refreshMarketData, REFRESH_INTERVAL)
 }
 
 function renderDetailStat(label, value) {
@@ -243,9 +285,7 @@ app.innerHTML = `
 </button>
 `
 
-marketData = await fetchMarketData()
-filteredMarketData = filterByTotalVolume(marketData)
-renderMarketData(filteredMarketData)
+startMarketDataRefresh()
 
 const backToTopButton = document.querySelector('#back-to-top')
 const backToTopThreshold = 320
